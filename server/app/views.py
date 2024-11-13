@@ -58,16 +58,22 @@ def link_create(request):
                 return Response(status=403, data={'error': True, 'message': 'LINK_LIMIT_REACHED'})
             if 'url' not in request.data:
                 return Response(status=400, data={'error': True, 'message': 'LINK_URL_REQUIRED'})
-            elif 'slug' not in request.data:
-                request.data['slug'] = generate_link()
+            elif 'slug' not in request.data or not request.data['slug']:
+                slug = generate_link(request.data['url'])
+                if(slug == None):
+                    return Response(status=400, data={'error': True, 'message': 'ERROR'})
+                request.data['slug'] = slug
+            else: 
+                if Link.objects.filter(slug = request.data['slug']):
+                    return Response(status=400, data={'error': True, 'message': 'LINK_EXISTS'})
             request.data['created_by'] = sessionId
             serializer = LinkSerializer(data=request.data)
             if serializer.is_valid():
                 serializer.save()
                 session.urls_created += 1
                 session.save()
-                return Response(status=201, data={'error': False})
-            return Response(status=400 ,data={'error': True, 'message': 'INVALID_DATA'})
+                return Response(status=201, data={'error': False, 'slug': request.data['slug']})
+            return Response(status=400, data={'error': True, 'message': 'INVALID_DATA'})
     
 @api_view(['POST'])
 def authenticate(request):
