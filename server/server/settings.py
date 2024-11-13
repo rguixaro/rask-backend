@@ -99,10 +99,10 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'rask_db',
-        'USER': 'djangouser',
-        'PASSWORD': 'cC93u9$jC^27',
-        'HOST': 'localhost',
-        'PORT': '3306',
+        'USER': str(os.getenv('DB_USER')),
+        'PASSWORD': str(os.getenv('DB_PASSWORD')),
+        'HOST': str(os.getenv('DB_HOST')),
+        'PORT': 3306,
     }
 }
 

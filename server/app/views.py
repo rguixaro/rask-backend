@@ -9,7 +9,7 @@ from .tokens import generate_access_cookie,store_cookies,decode_token
 
 
 @api_view(['GET'])
-def links(request):
+def links_list(request):
     if request.method == 'GET':
         if not 'rask_session' in request.COOKIES:
             return Response(status=401, data={'error': True, 'message': 'UNAUTHORIZED'})
@@ -22,10 +22,10 @@ def links(request):
                 sessionId = token['value']['session_id']
                 links = Link.objects.filter(created_by = sessionId).defer('created_by')
                 serializer = LinkSerializer(links, many=True, fields=['url', 'slug', 'visits' ,'created_at'])
-                return Response(status=200, data={'error': False, 'items': serializer.data})
+                return Response(status=200, data={'error': False, 'list': serializer.data})
     
 @api_view(['GET'])
-def link(request, slug: str):
+def link_check(request, slug: str):
     if request.method == 'GET':
         try:
             link = Link.objects.get(slug = slug)
@@ -33,7 +33,7 @@ def link(request, slug: str):
             link.save()
             return Response(status=200, data={'error': False, 'url': link.url})
         except Link.DoesNotExist:
-            return Response(status=404, data={'error': True, 'message': 'LINK_NOT_FOUND'})
+            return Response(status=200, data={'error': True, 'message': 'LINK_NOT_FOUND'})
 
 @api_view(['GET'])
 def link_exists(request, slug: str):
@@ -55,9 +55,9 @@ def link_create(request):
             sessionId = token['value']['session_id']
             session = Session.objects.get(id=sessionId)
             if session.urls_created >= 10:
-                return Response(status=403, data={'error': True, 'message': 'LIMIT_REACHED'})
+                return Response(status=403, data={'error': True, 'message': 'LINK_LIMIT_REACHED'})
             if 'url' not in request.data:
-                return Response(status=400, data={'error': True, 'message': 'URL_REQUITED'})
+                return Response(status=400, data={'error': True, 'message': 'LINK_URL_REQUIRED'})
             elif 'slug' not in request.data:
                 request.data['slug'] = generate_link()
             request.data['created_by'] = sessionId
