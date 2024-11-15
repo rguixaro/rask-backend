@@ -1,11 +1,8 @@
 
-from dotenv import load_dotenv
 from  hashlib import md5
-import os
 
 from .models import Link
 
-load_dotenv()
 
 def generate_link(longURL):
     hash = encode_to_md5(longURL)

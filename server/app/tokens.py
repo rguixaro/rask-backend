@@ -24,9 +24,8 @@ def store_cookies(refresh_token, access_token):
         max_age=60*60*24*365,
         secure=True,
         httponly=True,
-        samesite='Strict    ',
+        samesite='Strict',
         domain='rask.rguixaro.dev'
-
     )
     response.set_cookie(key= 'rask_session',
         value= access_token,
