@@ -25,23 +25,24 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = str(os.getenv('SECRET_KEY'))
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = str(os.getenv('DEBUG')) == 'True'
+DEBUG = False
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = [str(os.getenv('DOMAIN'))]
 
-CSRF_TRUSTED_ORIGINS = ["http://127.0.1.1:8000", "http://localhost:3000/"]
+CSRF_TRUSTED_ORIGINS = ["https://rask.rguixaro.dev"]
+
+SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
+
+SECURE_SSL_REDIRECT = False
+SESSION_COOKIE_SECURE = True
+CSRF_COOKIE_SECURE = True
 
 # Application definition
 
 CORS_ORIGIN_ALLOW_ALL = True
 CORS_ALLOW_CREDENTIALS = True
 
-CORS_ALLOWED_ORIGINS = [
-    "http://localhost:3080",
-    "http://127.0.0.1:9000",
-]
-
-
+CORS_ALLOWED_ORIGINS = ["https://rask.rguixaro.dev"]
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -91,22 +92,19 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'server.wsgi.application'
 
-
 # Database
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
 
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'rask_db',
-        'USER': str(os.getenv('DB_USER')),
-        'PASSWORD': str(os.getenv('DB_PASSWORD')),
-        'HOST': str(os.getenv('DB_HOST')),
-        'PORT': 3306,
+        'NAME': str(os.getenv('RDS_DB_NAME')),
+        'USER': str(os.getenv('RDS_USERNAME')),
+        'PASSWORD': str(os.getenv('RDS_PASSWORD')),
+        'HOST': str(os.getenv('RDS_HOSTNAME')),
+        'PORT': os.getenv('RDS_PORT'),
     }
 }
-
-#AUTHENTICATION_BACKENDS  = ['app.auth_backend.NoAuthBackend']
 
 # Password validation
 # https://docs.djangoproject.com/en/5.1/ref/settings/#auth-password-validators
