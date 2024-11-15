@@ -6,8 +6,6 @@ import os
 from .models import Link
 
 load_dotenv()
-SHORT_URL_CHAR_SIZE = int(os.getenv("SHORT_URL_CHAR_SIZE"))
-
 
 def generate_link(longURL):
     hash = encode_to_md5(longURL)
@@ -15,8 +13,8 @@ def generate_link(longURL):
         return None
     numberOfCharsInHash = len(hash)
     counter = 0
-    while counter < numberOfCharsInHash - SHORT_URL_CHAR_SIZE:
-        slug = hash[counter:counter + SHORT_URL_CHAR_SIZE]
+    while counter < numberOfCharsInHash - 7:
+        slug = hash[counter:counter + 7]
         link = Link.objects.filter(slug = slug)
         if not link:
             return slug
