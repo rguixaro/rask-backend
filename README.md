@@ -10,6 +10,8 @@ This project uses the following technologies:
 -   [**Python**](https://python.org) & [**Django**](https://djangoproject.com/) |
     Backend stack.
 -   [**MySQL**](https://mysql.com/) | Relational database.
+-   [**TypeScript**](https://www.typescriptlang.org/) | JavaScript with syntax for
+    types.
 -   [**Tailwind CSS**](https://tailwindcss.com) &
     [**Radix**](https://radix-ui.com) | Design System.
 -   [**Prettier**](https://prettier.io) w/
